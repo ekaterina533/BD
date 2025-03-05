@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ table_name }} Management</title>
+</head>
+<body>
+    <h1>Управление таблицей: {{ table_name }}</h1>
+
+    <a href="/">На главную</a>
+
+    <h2>Список записей</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                {% for field in fields %}
+                    <th>{{ field }}</th>
+                {% endfor %}
+                {% if join_table %}
+                    <th>Связанные данные</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    {% for field in fields %}
+                        <td>
+                            {% if join_table %}
+                                {{ item[0] | dynamic_getattr(field) or item[1] | dynamic_getattr(field) }}
+                            {% else %}
+                                {{ item | dynamic_getattr(field) }}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Добавить новую запись</h2>
+    <form method="POST">
+        {% for field in fields %}
+            {% if field != 'id' %} <!-- Исключить ID, если он автоинкрементный -->
+                <label for="{{ field }}">{{ field }}</label>
+                <input type="text" name="{{ field }}" id="{{ field }}">
+                <br>
+            {% endif %}
+        {% endfor %}
+        <button type="submit">Добавить</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление базой данных</title>
+</head>
+<body>
+    <h1>Управление базой данных</h1>
+    <p>Выберите таблицу для управления:</p>
+    <ul>
+        {% for table in tables %}
+            <li><a href="{{ url_for('manage_table', table_name=table) }}">{{ table.capitalize() }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
